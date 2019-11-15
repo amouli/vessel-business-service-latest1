@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<string xmlns="http://www.softship.com/Softship.WebServices">({
+
+"HeaderTexts" : ({
+
+"VoyageNumber" : "Voyage #",
+"VesselCode" : "Vessel",
+"VesselName" : null
+,
+"TypeCode" : "Type",
+"TypeDescription" : null
+,
+"StatusCode" : "Status",
+"StatusDescription" : null
+,
+"PortOfLoadingCode" : "POL",
+"PortOfLoadingCallId" : "POL Call ID",
+"PortOfLoadingDescription" : null
+,
+"PortOfDischargeCode" : "POD",
+"PortOfDischargeCallId" : "POD Call ID",
+"PortOfDischargeDescription" : null
+,
+"CentralPortCode" : "Centralport",
+"PortCallId" : "Call ID",
+"CentralPortDescription" : null
+,
+"StartDate" : "Departure",
+"EndDate" : "Arrival",
+"Duration" : "Duration",
+"HasTransshipment" : "Direct",
+"ServiceName" : "Service",
+"PortCode" : "Code",
+"PortName" : "Port",
+"ArrivalDate" : "Arrival Date",
+"SailingDate" : "Sailing Date"})
+,
+"Voyages" : [
+
+({
+
+"VoyageMachineNumber" : "2666",
+"VoyageNumber" : "SAL9069",
+"VesselCode" : "ECO",
+"VesselName" : "El Coqui",
+"TypeCode" : "export",
+"TypeDescription" : "",
+"StatusCode" : "Active",
+"StatusDescription" : "",
+"CentralPortCode" : "USJAX",
+"CentralPortDescription" : "Jacksonville, FL",
+"PortOfLoadingCode" : "USJAX",
+"PortOfLoadingDescription" : "Jacksonville, FL",
+"PortOfDischargeCode" : "PRSJU",
+"PortOfDischargeDescription" : "San Juan, PR",
+"StartDate" : "08-30-2019",
+"EndDate" : "09-02-2019",
+"Duration" : "2",
+"DurationHours" : "10",
+"HasTransshipment" : "False",
+"ServiceCode" : null
+,
+"ServiceName" : null
+,
+"Route" : null
+,
+"Ports" : [
+
+({
+
+"PortCode" : "USJAX",
+"PortName" : "Jacksonville, FL",
+"PortCallId" : "8660",
+"ArrivalDate" : "08-29-2019",
+"ArrivalTime" : "09:11",
+"SailingDate" : "08-30-2019",
+"SailingTime" : "18:06",
+"TypeDescription" : "Load",
+"Terminals" : [
+
+({
+
+"Code" : "JAXT000",
+"Name" : "JPA Term, Jacksonville, FL",
+"ArrivalDate" : "08-29-2019",
+"ArrivalTime" : "09:11",
+"DepartureDate" : "08-30-2019",
+"DepartureTime" : "18:06"})
+]
+,
+"PortStatus" : "AA"})
+, 
+({
+
+"PortCode" : "PRSJU",
+"PortName" : "San Juan, PR",
+"PortCallId" : "8661",
+"ArrivalDate" : "09-02-2019",
+"ArrivalTime" : "07:21",
+"SailingDate" : "09-02-2019",
+"SailingTime" : "23:11",
+"TypeDescription" : "Load/Discharge",
+"Terminals" : [
+
+({
+
+"Code" : "SJUT001",
+"Name" : "Isla Grande Term, San Juan, PR",
+"ArrivalDate" : "09-02-2019",
+"ArrivalTime" : "07:21",
+"DepartureDate" : "09-02-2019",
+"DepartureTime" : "23:11"})
+]
+,
+"PortStatus" : "AA"})
+]
+})
+, 
+({
+
+"VoyageMachineNumber" : "2757",
+"VoyageNumber" : "SAL9071",
+"VesselCode" : "ECO",
+"VesselName" : "El Coqui",
+"TypeCode" : "export",
+"TypeDescription" : "",
+"StatusCode" : "Active",
+"StatusDescription" : "",
+"CentralPortCode" : "USJAX",
+"CentralPortDescription" : "Jacksonville, FL",
+"PortOfLoadingCode" : "USJAX",
+"PortOfLoadingDescription" : "Jacksonville, FL",
+"PortOfDischargeCode" : "PRSJU",
+"PortOfDischargeDescription" : "San Juan, PR",
+"StartDate" : "09-07-2019",
+"EndDate" : "09-09-2019",
+"Duration" : "2",
+"DurationHours" : "3",
+"HasTransshipment" : "False",
+"ServiceCode" : null
+,
+"ServiceName" : null
+,
+"Route" : null
+,
+"Ports" : [
+
+({
+
+"PortCode" : "USJAX",
+"PortName" : "Jacksonville, FL",
+"PortCallId" : "8737",
+"ArrivalDate" : "09-05-2019",
+"ArrivalTime" : "15:38",
+"SailingDate" : "09-07-2019",
+"SailingTime" : "00:33",
+"TypeDescription" : "Load",
+"Terminals" : [
+
+({
+
+"Code" : "JAXT000",
+"Name" : "JPA Term, Jacksonville, FL",
+"ArrivalDate" : "09-05-2019",
+"ArrivalTime" : "15:38",
+"DepartureDate" : "09-07-2019",
+"DepartureTime" : "00:33"})
+]
+,
+"PortStatus" : "AA"})
+, 
+({
+
+"PortCode" : "PRSJU",
+"PortName" : "San Juan, PR",
+"PortCallId" : "8738",
+"ArrivalDate" : "09-09-2019",
+"ArrivalTime" : "07:15",
+"SailingDate" : "09-10-2019",
+"SailingTime" : "04:40",
+"TypeDescription" : "Load/Discharge",
+"Terminals" : [
+
+({
+
+"Code" : "SJUT001",
+"Name" : "Isla Grande Term, San Juan, PR",
+"ArrivalDate" : "09-09-2019",
+"ArrivalTime" : "07:15",
+"DepartureDate" : "09-10-2019",
+"DepartureTime" : "04:40"})
+]
+,
+"PortStatus" : "AA"})
+]
+})
+]
+})
+</string>

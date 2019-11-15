@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<string xmlns="http://www.softship.com/Softship.WebServices">({
+
+"HeaderTexts" : ({
+
+"VoyageNumber" : "Voyage #",
+"VesselCode" : "Vessel",
+"VesselName" : null
+,
+"TypeCode" : "Type",
+"TypeDescription" : null
+,
+"StatusCode" : "Status",
+"StatusDescription" : null
+,
+"PortOfLoadingCode" : "POL",
+"PortOfLoadingCallId" : "POL Call ID",
+"PortOfLoadingDescription" : null
+,
+"PortOfDischargeCode" : "POD",
+"PortOfDischargeCallId" : "POD Call ID",
+"PortOfDischargeDescription" : null
+,
+"CentralPortCode" : "Centralport",
+"PortCallId" : "Call ID",
+"CentralPortDescription" : null
+,
+"StartDate" : "Departure",
+"EndDate" : "Arrival",
+"Duration" : "Duration",
+"HasTransshipment" : "Direct",
+"ServiceName" : "Service",
+"PortCode" : "Code",
+"PortName" : "Port",
+"ArrivalDate" : "Arrival Date",
+"SailingDate" : "Sailing Date"})
+,
+"Voyages" : [
+
+({
+
+"VoyageMachineNumber" : "2760",
+"VoyageNumber" : "SAL9077",
+"VesselCode" : "ECO",
+"VesselName" : "El Coqui",
+"TypeCode" : "export",
+"TypeDescription" : "",
+"StatusCode" : "Active",
+"StatusDescription" : "",
+"CentralPortCode" : "USJAX",
+"CentralPortDescription" : "Jacksonville, FL",
+"PortOfLoadingCode" : "USJAX",
+"PortOfLoadingDescription" : "Jacksonville, FL",
+"PortOfDischargeCode" : "PRSJU",
+"PortOfDischargeDescription" : "San Juan, PR",
+"StartDate" : "09-27-2019",
+"EndDate" : "09-30-2019",
+"Duration" : "2",
+"DurationHours" : "7",
+"HasTransshipment" : "False",
+"ServiceCode" : null
+,
+"ServiceName" : null
+,
+"Route" : null
+,
+"Ports" : [
+
+({
+
+"PortCode" : "USJAX",
+"PortName" : "Jacksonville, FL",
+"PortCallId" : "8746",
+"ArrivalDate" : "09-26-2019",
+"ArrivalTime" : "14:00",
+"SailingDate" : "09-27-2019",
+"SailingTime" : "18:00",
+"TypeDescription" : "Load",
+"Terminals" : [
+
+({
+
+"Code" : "JAXT000",
+"Name" : "JPA Term, Jacksonville, FL",
+"ArrivalDate" : "09-26-2019",
+"ArrivalTime" : "14:00",
+"DepartureDate" : "09-27-2019",
+"DepartureTime" : "18:00"})
+]
+,
+"PortStatus" : "PP"})
+, 
+({
+
+"PortCode" : "PRSJU",
+"PortName" : "San Juan, PR",
+"PortCallId" : "8747",
+"ArrivalDate" : "09-30-2019",
+"ArrivalTime" : "05:00",
+"SailingDate" : "10-01-2019",
+"SailingTime" : "05:00",
+"TypeDescription" : "Load/Discharge",
+"Terminals" : [
+
+({
+
+"Code" : "SJUT001",
+"Name" : "Isla Grande Term, San Juan, PR",
+"ArrivalDate" : "09-30-2019",
+"ArrivalTime" : "05:00",
+"DepartureDate" : "10-01-2019",
+"DepartureTime" : "05:00"})
+]
+,
+"PortStatus" : "PP"})
+]
+})
+, 
+({
+
+"VoyageMachineNumber" : "2961",
+"VoyageNumber" : "SAL9078",
+"VesselCode" : "TAO",
+"VesselName" : "Taino",
+"TypeCode" : "export",
+"TypeDescription" : "",
+"StatusCode" : "Active",
+"StatusDescription" : "",
+"CentralPortCode" : "USJAX",
+"CentralPortDescription" : "Jacksonville, FL",
+"PortOfLoadingCode" : "USJAX",
+"PortOfLoadingDescription" : "Jacksonville, FL",
+"PortOfDischargeCode" : "PRSJU",
+"PortOfDischargeDescription" : "San Juan, PR",
+"StartDate" : "10-01-2019",
+"EndDate" : "10-04-2019",
+"Duration" : "2",
+"DurationHours" : "7",
+"HasTransshipment" : "False",
+"ServiceCode" : null
+,
+"ServiceName" : null
+,
+"Route" : null
+,
+"Ports" : [
+
+({
+
+"PortCode" : "USJAX",
+"PortName" : "Jacksonville, FL",
+"PortCallId" : "9166",
+"ArrivalDate" : "09-30-2019",
+"ArrivalTime" : "14:00",
+"SailingDate" : "10-01-2019",
+"SailingTime" : "18:00",
+"TypeDescription" : "Load",
+"Terminals" : [
+
+({
+
+"Code" : "JAXT001",
+"Name" : "Talleyrand Term, Jacksonville",
+"ArrivalDate" : "09-30-2019",
+"ArrivalTime" : "14:00",
+"DepartureDate" : "10-01-2019",
+"DepartureTime" : "18:00"})
+]
+,
+"PortStatus" : "PP"})
+, 
+({
+
+"PortCode" : "PRSJU",
+"PortName" : "San Juan, PR",
+"PortCallId" : "9167",
+"ArrivalDate" : "10-04-2019",
+"ArrivalTime" : "05:00",
+"SailingDate" : "10-05-2019",
+"SailingTime" : "05:00",
+"TypeDescription" : "Load/Discharge",
+"Terminals" : [
+
+({
+
+"Code" : "SJUT001",
+"Name" : "Isla Grande Term, San Juan, PR",
+"ArrivalDate" : "10-04-2019",
+"ArrivalTime" : "05:00",
+"DepartureDate" : "10-05-2019",
+"DepartureTime" : "05:00"})
+]
+,
+"PortStatus" : "PP"})
+]
+})
+]
+})
+</string>

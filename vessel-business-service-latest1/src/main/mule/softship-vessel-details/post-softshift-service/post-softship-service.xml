@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="post-softship-service_Flow" doc:id="eee8f46a-4216-4bf0-b033-8b3e988b6bb1" >
+		<logger level="INFO" doc:name="Logger--PAYLOAD BEFORE SENDING TO OBJECTSTORE ON" doc:id="650d9c42-8e4b-4b24-a821-f72a3e05f7b2" message='#["\n******\nPAYLOAD BEFORE SENDING TO OBJECTSTORE ON: \n" + payload + "\n******\n"] '/>
+		<ee:transform doc:name="Transform Message" doc:id="0374eafc-e14d-4b67-a6a6-25432044a051" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="post" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	httpStatus: "503",
+	statusCode: "110",
+	message : "No message recieved!.",
+	requestorResource: "post-softship-service",
+	impact: "2",
+	urgency: "1",
+	assignmentGroup: "Service Platform",
+	shortDescription: "Failed to retrieve  Canonical JSON ."
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="Array to Json" doc:id="ca248053-e6fb-4ab0-96c9-7e8e3532c41c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-variable value="${veloz.object.store.key}" doc:name="Variable - jsonpayload.objectstore.key" doc:id="4d1904a7-94ff-4d43-b25a-c536c03cfe69" variableName="jsonpayload"/>
+		<flow-ref doc:name="Flow Reference" doc:id="1dc94a96-c7ba-43bd-bc30-9e42f6fddd23" name="objectstore-flowFlow"/>
+		<ee:transform doc:name="Transform Message" doc:id="a9242ba6-e38a-49b4-897e-c799410d2a2e" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="property" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"http.status" : "200"
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="eab9f295-fb12-4c3a-85bf-4e6358056e6c" message='#["\n******\n PAYLOAD SUBMITTED TO OBJECTSTORE \n******\n"] '/>
+	</flow>
+</mule>

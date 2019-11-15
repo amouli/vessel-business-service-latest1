@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<sub-flow name="global-exceptionSub_Flow" doc:id="76c7f145-4f98-4e27-8f5e-b39ed53c7a78" >
+		<ee:transform doc:name="Transform Message" doc:id="14915542-5710-4d00-8d6a-fe1fcb86f691" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="global" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	httpStatus: "503",
+	statusCode: "111",
+	message : "Unable to process request"
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="fb01aa11-7740-4d4c-b259-c5a524473534" name="set-response-payload"/>
+	</sub-flow>
+	<flow name="support-ticket" doc:id="64618408-8737-43f5-bc76-c535d2534f5f" >
+		<ee:transform doc:name="Set Support Ticket Payload" doc:id="b11e26f7-d704-4ee2-9eec-5d433b3ff845" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"requestorName": p('service.name'),
+	"requestorResource": vars.expression.requestorResource,
+	 "recipients":  if (p('env') != ('prod'))   [{
+		"email":  p('https.support-system-service.email'),
+		"type": "TO"
+	},
+	{
+		"email":  p('https.support-system-service.email.cc'),
+		"type": "CC" 
+	}]   else
+	"recipients": [{
+		"email":  p('https.support-system-service.email'),
+	"type": "TO"
+	}],
+	"errorCode": vars.expression.statusCode,
+	"impact": vars.expression.impact,
+	"urgency": vars.expression.urgency,
+	"assignmentGroup": vars.expression.assignmentGroup,
+	"shortDescription": vars.expression.shortDescription,
+	"comments": vars.expression.message 
+}
+]]></ee:set-payload>
+			</ee:message>
+			<ee:variables />
+		</ee:transform>
+		<until-successful maxRetries="5" doc:name="Until Successful" doc:id="30773ac5-880b-4927-86f6-5d644efe75e3" >
+			<http:request method="POST" doc:name="Invoke Support Ticket Service" doc:id="ee40f1e1-c68b-45cf-9bea-4208bfeed7c7" path="/${https.support-system-service.path}" config-ref="Support_Ticket_Service_Configuration">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	client_secret : ${https.client_secret},
+	client_id : ${https.client_id},
+	Content-Type : application/json
+}]]]></http:headers>
+			</http:request>
+		</until-successful>
+		<logger level="INFO" doc:name="Logger" doc:id="e8c15610-384d-4cb7-82c2-7541db108e88" message="Support Ticket Created"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="8ffbe9c2-c91f-48f2-84a1-c35cfc1f9747" >
+				<ee:transform doc:name="Transform Message" doc:id="16a55068-f114-48c0-abb7-861759a1439e" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="support" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	statusCode : "101",
+message : "Unable to open Support Ticket DueTo: " ++ error.description,
+	httpStatus : if(attributes.httpStatus == empty) vars.errorMessage.httpStatus else attributes.httpStatus
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger" doc:id="67edee10-a3b1-473d-a60d-d4b08ade6a79" message="#[&quot;\n* * * * SEND SUPPORT TICKET REQUEST FAILURE: \n HTTP STATUS OF: &quot; +attributes.httpStatus + &quot;\n HTTP REASON: \n&quot; + message.inboundProperties.'http.reason' + &quot;\n PAYLOAD: \n&quot; + message.payloadAs(java.lang.String) + &quot;\n* * * * &quot;]"/>
+				<flow-ref doc:name="set-response-payload" doc:id="ba6641b9-30e0-4b97-a002-0852bf899981" name="set-response-payload"/>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<sub-flow name="set-response-payload" doc:id="cc2a79a8-877d-41b6-b8d4-9746f5bb2c16" >
+		<ee:transform doc:name="Transform Message" doc:id="ec3f0013-b480-4d2f-a206-91c99e3784f7" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="property" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	'Content-Type': "application/json",
+	'http.status': vars.global.httpStatus
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<set-payload value='#[{ "statusCode":"#[vars.global.statusCode]","message":"#[vars.global.message]"}]' doc:name="Set Payload" doc:id="294e4e13-71f6-4318-bc95-7cd1de306f6d" />
+	</sub-flow>
+</mule>

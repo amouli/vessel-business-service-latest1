@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:listener-config name="vessel-business-service-httpListenerConfig" doc:name="HTTP Listener config" doc:id="4f335927-2af3-4049-ad70-35a52431db57" >
+		<http:listener-connection protocol="HTTPS" host="${https.private.host}" port="${https.private.port}" >
+			<tls:context >
+				<tls:key-store path="${veloz.business.cert}" keyPassword="${veloz.business.key.password}" password="${veloz.business.password}" />
+			</tls:context>
+		</http:listener-connection>
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration2" doc:name="HTTP Request configuration" doc:id="80b8cdff-d48c-4c7f-a20a-a9a4f6e80b48" basePath="${softship-bashpath}" >
+		<http:request-connection protocol="HTTPS" host="${softship-host}" port="${softship-port}" />
+	</http:request-config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="f24413fd-0fa8-475e-b72b-f8e6160231e1" file="application-${env}.properties" key="${prod.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<http:request-config name="Support_Ticket_Service_Configuration" doc:name="HTTP Request configuration" doc:id="11ec11bb-d0e3-4cb5-8cd2-547182a86709" basePath="${https.support-system-service.version}" >
+		<http:request-connection protocol="HTTPS" host="${https.support-system-service.host}" port="${https.private.port}" />
+	</http:request-config>
+	<apikit:config outboundHeadersMapName="outboundHeadersMapName" httpStatusVarName="httpStatus" doc:name="Router" doc:id="3769ce92-a556-490b-9167-b429ad427cf6" name="vessel-business-service-config" api="api.raml" >
+		<apikit:flow-mappings >
+			<apikit:flow-mapping resource="/voyages" action="get" content-type="application/json" flow-ref="get:\voyages:api-config" />
+		</apikit:flow-mappings>
+	</apikit:config>
+	<api-gateway:autodiscovery apiId="${api.version}" doc:name="API Autodiscovery" doc:id="e58fe039-2c05-47c7-866c-adb0f5944099" flowRef="get:\voyages:api-config" />
+	<os:object-store name="Post-ObjectStore" doc:name="Object store" doc:id="b7159874-8585-438a-b24f-69390feb4d08" config-ref="_defaultUserObjectStore" />
+	<os:config name="_defaultUserObjectStore" doc:name="ObjectStore Config" doc:id="dada0b06-6de1-4c38-b55f-449bf422d5f2" >
+		<os:connection >
+			<reconnection />
+		</os:connection>
+	</os:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="40d6b67c-e605-484e-b233-05baa09baf52" file="application-${env}.properties" />
+</mule>

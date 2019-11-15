@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="e648acbd-3bdf-4e1d-b2c8-60d2ee896cf2" basePath="${softship-bashpath}" >
+		<http:request-connection protocol="HTTPS" host="${softship-host}" port="${softship-port}" />
+	</http:request-config>
+	<flow name="get-softship-serviceSub_Flow" doc:id="61cd98f2-f6a3-46fb-aba2-cfe361a5b175" >
+		<logger level="INFO" doc:name="Logger" doc:id="04b81db8-29e0-4b6c-9c43-b628ec7fe151" message="Logger- before sending request to shopshift system service -- #[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="b04607af-c23b-4209-be73-5c0d8a4a3c19" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="expression" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	httpStatus : "503",
+	statusCode : "110",
+	message : "No message recieved !.",
+	requestorResource : "get-Softship-service",
+	impact : "2",
+	urgency : "1",
+	assignmentGroup : "Service Platform",
+	shortDescription : "Failed to retrieve  veloz service response .",
+}
+
+]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<until-successful maxRetries="${http.retry}" doc:name="Until Successful" doc:id="3d1ba181-4eb7-4c92-bb7b-bb2bfb9e3a16" millisBetweenRetries="${http.millisecondretry}">
+			<http:request method="GET" doc:name="httprequest-get-softship" doc:id="0637186c-acf4-4458-a556-04ca8f643a44" config-ref="HTTP_Request_configuration" path="${softship-path}">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	client_secret : ${https.client_secret},
+	client_id : ${https.client_id}
+}]]]></http:headers>
+				<http:query-params ><![CDATA[#[output application/java
+---
+{
+	podcode : #[attributes.queryParams.podcode],
+	arrival : #[attributes.queryParams.arrival],
+	count : #[attributes.queryParams.count],
+	includeTransshipment : #[attributes.queryParams.includeTransshipment],
+	useETBandETD : #[attributes.queryParams.useETBandETD],
+	dateFormats : #[attributes.queryParams.dateFormat],
+	service : #[attributes.queryParams.service],
+	days : #[attributes.queryParams.days],
+	departure : #[attributes.queryParams.departure],
+	onlyWebPorts : #[attributes.queryParams.onlyWebPorts],
+	includeTerminals : #[attributes.queryParams.includeTerminals],
+	polcode :      #[attributes.queryParams.polcode]
+}]]]></http:query-params>
+			</http:request>
+		</until-successful>
+		<ee:transform doc:name="Transform Message" doc:id="2bbd3178-e880-46f2-947f-d07d4743ddac" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="property" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"http.status": "200"
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="9d173145-50fb-402f-b317-972802400be0" message="Logger- after  sending request to shopshift system service --- #[payload]"/>
+		<ee:transform doc:name="Transform Message-text/xml" doc:id="caea8a87-6aaf-4580-804c-ffa19d92f0d0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+---
+payload
+	
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="30daf10a-a5f8-42db-a4db-c3e4d13e5206" >
+				<ee:transform doc:name="Set Error Message" doc:id="eb2baafe-65ca-4ecd-b82d-304b21a165fc" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="error" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	errorMessage : (vars.expression.message) ++ error.description
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<logger level="INFO" doc:name="Log Error message" doc:id="cd177255-ac45-43d8-842a-84849bc4059a" message='#[payload]'/>
+				<flow-ref doc:name="Flow Reference-support-ticket" doc:id="eccddd08-a3cc-4144-aaa7-66f4094b79c1" name="support-ticket"/>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<sub-flow name="get-Softship-serviceFlow" doc:id="048d4d05-a53a-470e-b1a2-783fdacb8d8b" >
+		<flow-ref doc:name="get-softship-serviceSub_Flow" doc:id="a17c82aa-82e4-46ee-ad18-0f74d4c89ca7" name="get-softship-serviceSub_Flow"/>
+		<logger level="INFO" doc:name="Logger- after shopshift system service response transformation" doc:id="8362a50a-93b4-4a33-a201-a91815e7f6b1" message="Logger- after softship system service response transformation --  #[payload]"/>
+	</sub-flow>
+</mule>

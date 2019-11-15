@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	
+
+	<flow name="objectstore-flowFlow" doc:id="b0b94226-9fd1-46b0-997c-79f4283fb8b9" >
+		<os:store doc:name="Store" doc:id="4f6878f5-7d33-479c-a211-0d8464bab886" key="#[vars.jsonpayload]"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="299e7241-82bb-421f-96ed-91f1e03a327d" >
+				<ee:transform doc:name="Transform Message" doc:id="af329158-4950-4ddb-8897-77a474a2c6b1" >
+					<ee:message >
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="catch" ><![CDATA[%dw 2.0
+output application/json
+
+---
+{
+errorMessage : (vars.expression.message) ++ error.description
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger" doc:id="6a27b5d7-2fee-4fb7-8d25-63897f149562" message='#[payload]'/>
+				<flow-ref doc:name="Flow Reference" doc:id="da215ebb-a3bb-4f96-b74a-ada16597a807" name="support-ticket"/>
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+</mule>
